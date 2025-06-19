@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const ApoioApp());
-}
-
 class ApoioApp extends StatelessWidget {
   const ApoioApp({super.key});
 
