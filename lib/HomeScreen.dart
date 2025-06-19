@@ -191,6 +191,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              const SizedBox(height: 10),
+              _buildStatisticsGrid(),
+              const SizedBox(height: 25),
+              const Text(
+                'Alertas Importantes',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 10),
+              _buildWarningMessages(),
+              const SizedBox(height: 25),
+              _buildEmergencyButton(),
+              const SizedBox(height: 20),
+              _buildImageLogo(),
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -252,7 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildSecondCard() {
     return GestureDetector(
-      onTap: () => {}, // Chama o novo teste interativo
+      onTap: () => _showExpandedQuiz(context), // Chama o novo teste interativo
       child: Container(
         width: 350,
         height: 160,
@@ -387,6 +405,17 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Widget _buildWarningMessages() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: warningMessages
+            .map((message) => _buildWarningBubble(message))
+            .toList(),
+      ),
+    );
+  }
+
   Widget _buildWarningBubble(String message) {
     return Container(
       margin: const EdgeInsets.only(right: 10),
@@ -408,6 +437,28 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildEmergencyButton() {
+    return Center(
+      child: ElevatedButton.icon(
+        onPressed: () => _showEmergencyHelp(context),
+        icon: const Icon(Icons.emergency),
+        label: const Text('PRECISO DE AJUDA URGENTE'),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.red[800],
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          textStyle: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
       ),
     );
   }
@@ -455,6 +506,360 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 10),
           ],
         ),
+      ),
+    );
+  }
+
+  void _showExpandedQuiz(BuildContext context) {
+    int currentQuestion = 0;
+    int score = 0;
+
+    final List<Map<String, dynamic>> questions = [
+      {
+        'question':
+            'Com que frequência você pensa em apostas quando não está jogando?',
+        'options': [
+          'Nunca',
+          'Raramente',
+          'Várias vezes por semana',
+          'Quase todo dia'
+        ],
+        'scores': [0, 1, 2, 3],
+      },
+      {
+        'question':
+            'Você precisa apostar quantias cada vez maiores para sentir emoção?',
+        'options': ['Nunca', 'Às vezes', 'Frequentemente', 'Sempre'],
+        'scores': [0, 1, 2, 3],
+      },
+      {
+        'question':
+            'Quando tenta reduzir ou parar, sente inquietação ou irritabilidade?',
+        'options': ['Nunca', 'Levemente', 'Moderadamente', 'Gravemente'],
+        'scores': [0, 1, 2, 3],
+      },
+      {
+        'question':
+            'Seu hábito de apostas já causou problemas financeiros significativos?',
+        'options': [
+          'Nenhum problema',
+          'Pequenos atrasos',
+          'Dívidas consideráveis',
+          'Perdas catastróficas'
+        ],
+        'scores': [0, 1, 2, 3],
+      },
+      {
+        'question':
+            'Você já usou dinheiro de contas importantes (aluguel, contas) para apostar?',
+        'options': ['Nunca', '1-2 vezes', '3-5 vezes', 'Mais de 5 vezes'],
+        'scores': [0, 1, 2, 3],
+      },
+      {
+        'question':
+            'Já pediu empréstimos ou vendeu pertences para apostar ou pagar dívidas?',
+        'options': ['Nunca', 'Uma vez', 'Algumas vezes', 'Muitas vezes'],
+        'scores': [0, 1, 2, 3],
+      },
+      {
+        'question': 'Seu jogo já afetou negativamente seu trabalho ou estudos?',
+        'options': ['Nunca', 'Pouco', 'Moderadamente', 'Gravemente'],
+        'scores': [0, 1, 2, 3],
+      },
+      {
+        'question':
+            'Você já mentiu para familiares sobre seu hábito de apostas?',
+        'options': [
+          'Nunca',
+          'Omiti detalhes',
+          'Mentiras pequenas',
+          'Mentiras graves'
+        ],
+        'scores': [0, 1, 2, 3],
+      },
+      {
+        'question': 'Já perdeu relacionamentos importantes devido às apostas?',
+        'options': [
+          'Nenhum',
+          'Tensões leves',
+          '1 relacionamento',
+          'Vários relacionamentos'
+        ],
+        'scores': [0, 1, 2, 3],
+      },
+      {
+        'question':
+            'Já apostou para escapar de problemas ou aliviar sentimentos negativos?',
+        'options': ['Nunca', 'Raramente', 'Às vezes', 'Frequentemente'],
+        'scores': [0, 1, 2, 3],
+      },
+      {
+        'question':
+            'Depois de perder, você sente necessidade de apostar novamente para recuperar?',
+        'options': ['Nunca', 'Às vezes', 'Frequentemente', 'Sempre'],
+        'scores': [0, 1, 2, 3],
+      },
+      {
+        'question': 'Você já faltou ao trabalho/compromissos para apostar?',
+        'options': ['Nunca', '1-2 vezes', '3-5 vezes', 'Mais de 5 vezes'],
+        'scores': [0, 1, 2, 3],
+      },
+      {
+        'question':
+            'Quanto tempo você dedica semanalmente a pensar ou praticar apostas?',
+        'options': [
+          'Menos de 1h',
+          '2-5 horas',
+          '6-15 horas',
+          'Mais de 15 horas'
+        ],
+        'scores': [0, 1, 2, 3],
+      },
+      {
+        'question':
+            'Você já considerou ou tentou suicídio devido a problemas com apostas?',
+        'options': [
+          'Nunca',
+          'Pensamentos passageiros',
+          'Planejei seriamente',
+          'Tentei'
+        ],
+        'scores': [0, 3, 5, 7], // Peso maior para esta pergunta crítica
+      },
+      {
+        'question': 'Se pudesse voltar no tempo, você começaria a apostar?',
+        'options': ['Sim, sem dúvida', 'Talvez', 'Provavelmente não', 'Nunca'],
+        'scores': [3, 2, 1, 0],
+      },
+    ];
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            if (currentQuestion >= questions.length) {
+              String result;
+              String recommendation;
+              Color color;
+
+              if (score <= 7) {
+                result = 'Baixo risco';
+                recommendation =
+                    'Seu padrão parece recreativo. Mantenha o controle!';
+                color = Colors.green;
+              } else if (score <= 15) {
+                result = 'Risco moderado';
+                recommendation =
+                    'Alguns sinais preocupantes. Considere reduzir.';
+                color = Colors.orange;
+              } else if (score <= 25) {
+                result = 'Alto risco';
+                recommendation =
+                    'Padrão problemático. Recomendamos buscar ajuda.';
+                color = Colors.deepOrange;
+              } else {
+                result = 'Risco grave';
+                recommendation = 'Procure ajuda profissional imediatamente.';
+                color = Colors.red;
+              }
+
+              return AlertDialog(
+                backgroundColor: Colors.grey[900],
+                title: Text(
+                  'Resultado: $result',
+                  style: TextStyle(
+                    color: color,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22,
+                  ),
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Pontuação: $score/${questions.length * 3}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    Text(
+                      recommendation,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    if (score > 7)
+                      Column(
+                        children: [
+                          const Text(
+                            'Recursos de Apoio:',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            '• CVV: 188 (24h)\n• Jogo Responsável: 0800 891 891\n• Clínicas especializadas',
+                            style: TextStyle(
+                              color: Colors.blue[200],
+                            ),
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text(
+                      'Entendi',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  if (score > 15)
+                    TextButton(
+                      onPressed: () {
+                        // Ação para encontrar ajuda
+                        Navigator.pop(context);
+                        _showHelpResources(context);
+                      },
+                      child: Text(
+                        'Encontrar Ajuda',
+                        style: TextStyle(
+                          color: Colors.red[300],
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                ],
+              );
+            }
+
+            final question = questions[currentQuestion];
+            return AlertDialog(
+              backgroundColor: Colors.grey[900],
+              title: Text(
+                'Questionário (${currentQuestion + 1}/${questions.length})',
+                style: const TextStyle(color: Colors.white),
+              ),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      question['question'],
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    ...List.generate(question['options'].length, (index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              score += question['scores'][index] as int;
+                              currentQuestion++;
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.grey[800],
+                            foregroundColor: Colors.white,
+                            minimumSize: const Size(double.infinity, 50),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                          ),
+                          child: Text(
+                            question['options'][index],
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      );
+                    }),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _showHelpResources(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.grey[900],
+          title: const Text(
+            'Recursos de Ajuda',
+            style: TextStyle(color: Colors.white),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildHelpItem(
+                  'Centro de Valorização da Vida (CVV)', '188 • 24h/dia'),
+              _buildHelpItem('Jogo Responsável', '0800 891 891'),
+              _buildHelpItem('Clínicas Especializadas',
+                  'Lista disponível em www.saude.gov.br'),
+              _buildHelpItem(
+                  'Apostadores Anônimos', 'Reuniões presenciais e online'),
+              const SizedBox(height: 15),
+              const Text(
+                'Lembre-se: pedir ajuda é o primeiro passo para recuperação.',
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text(
+                'Fechar',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildHelpItem(String title, String details) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            details,
+            style: TextStyle(
+              color: Colors.blue[200],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -576,6 +981,66 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  void _showEmergencyHelp(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.red[900],
+        title: const Text(
+          'AJUDA IMEDIATA',
+          style: TextStyle(color: Colors.white),
+        ),
+        content: const Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Se você está em crise devido a apostas, ligue para:',
+              style: TextStyle(color: Colors.white),
+            ),
+            SizedBox(height: 20),
+            ListTile(
+              leading: Icon(Icons.phone, color: Colors.white),
+              title: Text(
+                'Jogadores Anônimos',
+                style: TextStyle(color: Colors.white),
+              ),
+              subtitle: Text(
+                '0800 771 0408',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.health_and_safety, color: Colors.white),
+              title: Text(
+                'CVV - Prevenção ao Suicídio',
+                style: TextStyle(color: Colors.white),
+              ),
+              subtitle: Text(
+                '188 (ligação gratuita)',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text(
+              'Fechar',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _showAboutDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -599,6 +1064,20 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  _buildImageLogo() {
+    return Center(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15),
+        child: Image.asset(
+          'assets/logo.jpeg',
+          width: double.infinity,
+          height: 350,
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }
